@@ -5,8 +5,8 @@ import shutil
 from pydub import AudioSegment
 from inference import predict
 
-# Fixed import: Matches the PyPI package name
-from streamlit_audiorec import st_audiorec  # Note: underscore in import
+# Fixed import: No 'streamlit_' prefix—it's a Streamlit component module
+from st_audiorec import st_audiorec  # This matches the installed package
 
 st.set_page_config(page_title="Baby Cry Translator", layout="centered")
 st.title("👶 Baby Cry Translator")
@@ -91,4 +91,4 @@ if uploaded is not None:
 
 ############################################################
 st.markdown("---")
-st.caption("Best accuracy: Use 2–3 sec clear cry clips. Works on mobile too!")
+st.caption("Best accuracy: Use 2–3 sec clear cry clips. Works on mobile too!")i
