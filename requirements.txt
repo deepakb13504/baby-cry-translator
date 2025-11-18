@@ -1,17 +1,12 @@
+streamlit==1.32.2
 tensorflow==2.12.0
 numpy==1.23.5
 librosa==0.10.0
 soundfile
 scikit-learn==1.3.2
-streamlit==1.32.2
 pydub
-pyttsx3
-sounddevice
 protobuf==3.20.3
 
-
-
-
-
-
-
+# NEW: Only these two extra packages
+st_audiorec         # Beautiful browser recorder
+ffmpeg-python       # Needed by pydub on Linux
