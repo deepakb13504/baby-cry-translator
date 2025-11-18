@@ -1,0 +1,30 @@
+{
+  "labels": [
+    "belly_pain",
+    "burping",
+    "cold_hot",
+    "discomfort",
+    "hungry",
+    "lonely",
+    "scared",
+    "tired"
+  ],
+  "X_train_shape": [
+    3683,
+    64,
+    94,
+    1
+  ],
+  "X_val_shape": [
+    789,
+    64,
+    94,
+    1
+  ],
+  "X_test_shape": [
+    790,
+    64,
+    94,
+    1
+  ]
+}
