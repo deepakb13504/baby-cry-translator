@@ -5,50 +5,37 @@ import shutil
 from pydub import AudioSegment
 from inference import predict
 
-# Fixed import: No 'streamlit_' prefix—it's a Streamlit component module
-from st_audiorec import st_audiorec  # This matches the installed package
+# CORRECT import for the streamlit-audiorec component
+from st_audiorec import st_audiorec
 
-st.set_page_config(page_title="Baby Cry Translator", layout="centered")
-st.title("👶 Baby Cry Translator")
+st.set_page_config(page_title="Baby Cry  Translator", layout="centered")
+st.title("Baby Cry Translator")
 st.write("Upload OR record baby's cry to detect the reason.")
 
-############################################################
-# 🎤 RECORD AUDIO (Browser-based, no PortAudio!)
-############################################################
-st.markdown("### 🎙 Record 3-Second Cry")
-wav_audio_data = st_audiorec()  # Records in browser, returns WAV bytes
+# ────────────────────────────── RECORD AUDIO ──────────────────────────────
+st.markdown("### Record 3-Second Cry")
+wav_audio_data = st_audiorec()
 
 if wav_audio_data is not None:
-    # Save to temp file for prediction
     rec_file = tempfile.NamedTemporaryFile(delete=False, suffix=".wav")
     rec_file.write(wav_audio_data)
     rec_file.close()
 
-    # Predict
     label, conf, _ = predict(rec_file.name)
     st.success(f"Prediction: **{label}** ({conf*100:.2f}%)")
-
-    # Preview the recording
     st.audio(wav_audio_data, format="audio/wav")
 
-    # Browser TTS (no pyttsx3 needed!)
-    if st.button("🔊 Speak Result"):
+    if st.button("Speak Result (Recording)", key="speak_rec"):
         st.markdown(
             f'<script>const msg = new SpeechSynthesisUtterance("The baby is likely {label}"); '
             f'msg.lang = "en-US"; window.speechSynthesis.speak(msg);</script>',
             unsafe_allow_html=True
         )
 
-    # Cleanup
-    try:
-        os.remove(rec_file.name)
-    except:
-        pass
+    os.unlink(rec_file.name)
 
-############################################################
-# 📎 FILE UPLOADER (Unchanged, works great)
-############################################################
-st.markdown("### 📁 Or Upload Audio")
+# ────────────────────────────── FILE UPLOADER ──────────────────────────────
+st.markdown("### Or Upload Audio File")
 uploaded = st.file_uploader("Choose audio file", type=["wav", "mp3", "m4a", "ogg", "mp4"])
 
 if uploaded is not None:
@@ -67,28 +54,23 @@ if uploaded is not None:
     else:
         shutil.copy(raw.name, wav_file.name)
 
-    # Predict
     label, conf, _ = predict(wav_file.name)
     st.success(f"Prediction: **{label}** ({conf*100:.2f}%)")
-
-    # Preview
     st.audio(wav_file.name, format="audio/wav")
 
-    # Browser TTS
-    if st.button("🔊 Speak Result"):
+    if st.button("Speak Result (Upload)", key="speak_up"):
         st.markdown(
             f'<script>const msg = new SpeechSynthesisUtterance("The baby is likely {label}"); '
             f'msg.lang = "en-US"; window.speechSynthesis.speak(msg);</script>',
             unsafe_allow_html=True
         )
 
-    # Cleanup
     for f in [raw.name, wav_file.name]:
         try:
             os.remove(f)
         except:
             pass
 
-############################################################
+# ────────────────────────────── FOOTER ──────────────────────────────
 st.markdown("---")
-st.caption("Best accuracy: Use 2–3 sec clear cry clips. Works on mobile too!")i
+st.caption("Best accuracy: Use 2–3 sec clear cry clips. Works on mobile too!")
